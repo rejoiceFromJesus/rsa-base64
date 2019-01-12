@@ -1,22 +1,51 @@
 <!DOCTYPE html>
+
 <html>
 <head>
-<meta charset="utf-8" />
-<title>js base64加密解密</title>
-  <script src="/base64.js"></script>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    <script src="/jquery.js"></script>
+    <script src="http://passport.cnblogs.com/scripts/jsencrypt.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+        	$.get("/test/public-key").done(function(data){
+        		$("#tra").val(data);
+        	});
+            var encrypt = new JSEncrypt();
+            $("#btn").click(function () {
+            	  encrypt.setPublicKey($("#tra").val());
+                  var data = encrypt.encrypt($("#password").val());
+                //+号的处理：因为数据在网络上传输时，非字母数字字符都将被替换成百分号（%）后跟两位十六进制数，而base64编码在传输到后端的时候，+会变成空格，因此先替换掉。后端再替换回来
+                //表单提交才需要？
+                //encodeURI(data).replace(/\+/g, '%2B')
+                data = {password:data};
+                 data = JSON.stringify(data);
+                alert("提交数据："+data);
+                $.ajax({
+                    url: '/test/login',
+                    data: data,  
+                    type: 'post',
+                    contentType:"application/json;charset=utf-8",
+                    success: function (msg) {
+                        alert("服务端返回："+msg);
+                    }
+                });
+            });
+
+        });
+
+
+    </script>
 </head>
 <body>
-<script>
-
-// 定义字符串
-var string = 'Hello World!';
-// 加密
-console.info(myBase64)
-var encodedString = myBase64.encode(string);
-console.log(encodedString); // 输出: "SGVsbG8gV29ybGQh"
-// 解密
-var decodedString = myBase64.decode(encodedString);
-console.log(decodedString); // 输出: "Hello World!"
-</script>
+    <div>
+       公钥：
+        <textarea id="tra" rows="15" cols="65">
+        </textarea><br/>
+        密码： <input id="password" type='text' />
+        <hr/>
+        注意+好的处理
+         <input type="button" id="btn" value="点我" />
+    </div>
 </body>
 </html>

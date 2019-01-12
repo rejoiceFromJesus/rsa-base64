@@ -4,6 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.HandlerMapping;
 
@@ -31,6 +33,10 @@ public class PageController {
 	        request.getServletPath());
 	    System.out.println(searchTerm);
 		return searchTerm;
+	}
+	@GetMapping(value="/")
+	public String index(){
+		return "/index";
 	}
 	
 }
