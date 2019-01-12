@@ -36,7 +36,7 @@ public class PageController {
 	}
 	@GetMapping(value="/")
 	public String index(){
-		return "/index";
+		return "index";
 	}
 	
 }
